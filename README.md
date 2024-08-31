@@ -206,17 +206,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - Thanks to all the cool developers who'll be using and contributing to this package!
 
 Remember, stay awesome and keep coding! 💻😎
-
-```
-
-This README provides a comprehensive overview of our theme manager package. It includes:
-
-1. A brief introduction and feature list
-2. A roadmap with todos
-3. The architecture diagram
-4. A basic usage guide
-5. Information on contributing and licensing
-
-The tone is casual and friendly, with emojis used throughout to add visual interest and make the content more engaging. The README is detailed, providing developers with a clear understanding of what the package does and how to use it.
-
-Would you like to make any changes or additions to this README before we start implementing the package?
