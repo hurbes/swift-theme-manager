@@ -192,6 +192,64 @@ struct ThemeSwitcherView: View {
 
 And that's it! You're now a theming wizard! 🧙‍♂️✨
 
+## 📁 Project Structure
+
+Here's how we've organized our project:
+
+```
+SwiftUIThemeManager/
+├── Package.swift
+├── README.md
+├── LICENSE.md
+├── Sources/
+│   └── SwiftUIThemeManager/
+│       ├── Core/
+│       │   ├── Protocols/
+│       │   ├── Models/
+│       │   └── Enums/
+│       ├── Services/
+│       ├── ViewModels/
+│       ├── Views/
+│       ├── Environment/
+│       └── Utils/
+├── Tests/
+│   └── SwiftUIThemeManagerTests/
+│       ├── CoreTests/
+│       ├── ServiceTests/
+│       └── ViewModelTests/
+└── Examples/
+    └── ThemeManagerDemo/
+```
+
+### 🤔 Our Thought Process
+
+We've put a lot of thought into this structure to make our package clean, modular, and easy to understand. Here's why we organized it this way:
+
+1. 📦 **Sources/SwiftUIThemeManager**: This is where all the magic happens! It's the main source directory for our package.
+
+   - 🧱 **Core/**: This is the foundation of our theme system. It's like the skeleton that holds everything together.
+     - 📜 **Protocols/**: These are the contracts that define what a theme should look like. They're like blueprints for our themes.
+     - 🏗 **Models/**: Here's where we implement the default versions of our theme components. It's like turning those blueprints into actual buildings!
+     - 🔢 **Enums/**: These enumerations help us access theme properties in a type-safe way. No more silly string typos!
+
+   - 🛠 **Services/**: This is where our theme management logic lives. It's like the control room for our themes.
+   
+   - 🧠 **ViewModels/**: These act as the brains of our operation, connecting our models to our views.
+   
+   - 👀 **Views/**: This is where we keep our SwiftUI views for previewing and selecting themes. It's the face of our package!
+   
+   - 🌍 **Environment/**: This is how we inject our themes into the SwiftUI environment. It's like the air our themes breathe in the app!
+   
+   - 🔧 **Utils/**: A handy toolbox for any utilities or helper functions we might need.
+
+2. 🧪 **Tests/**: We believe in the power of testing! This directory mirrors our source structure to make sure every part of our package is working correctly.
+
+3. 🎮 **Examples/**: We've included a demo project to show off what our theme manager can do. It's like a playground for our package!
+
+This structure follows the MVVM (Model-View-ViewModel) architecture, which helps us keep our code organized and separates concerns. It's also set up to play nice with Swift Package Manager, making it easy to integrate into your projects.
+
+We've designed this structure to be intuitive and scalable. Whether you're just using the package or diving in to contribute, you should be able to find your way around easily. And if we need to add new features in the future, we've got room to grow! 🌱
+
 ## 🤝 Contributing
 
 Hey, we'd love your help to make this package even more awesome! Whether it's fixing bugs, adding features, or improving documentation, all contributions are welcome. Just fork the repo, make your changes, and submit a pull request. Let's build something great together! 💪
