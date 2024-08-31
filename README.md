@@ -15,21 +15,7 @@ Hey there, awesome developer! 👋 Welcome to the SwiftUI Theme Manager package.
 - 🖌 Ability to create your own theme change/view UI
 - 🍎 Follows Apple guidelines and best practices
 - 📦 Available through Swift Package Manager
-
-## 🗺 Roadmap
-
-Here's what we're planning to work on:
-
-- [ ] Implement core theme protocols
-- [ ] Create default theme implementation
-- [ ] Develop theme service for managing themes
-- [ ] Build theme view model for MVVM architecture
-- [ ] Design and implement SwiftUI views for theme preview and selection
-- [ ] Create custom environment key for theme injection
-- [ ] Write comprehensive unit tests
-- [ ] Develop sample app showcasing theme manager features
-- [ ] Create detailed documentation and usage guide
-- [ ] Implement CI/CD pipeline for automated testing and deployment
+- 🖥️ Support for both macOS and iOS
 
 ## 🏗 Architecture
 
@@ -37,160 +23,99 @@ Here's a sneak peek at our awesome architecture:
 
 ```mermaid
 classDiagram
-    class IThemeProtocol {
+    class IThemeProtocol~CS, TP, SP~ {
         <<interface>>
-        +colorScheme: IColorSchemeProtocol
-        +typography: ITypographyProtocol
-        +spacing: ISpacingProtocol
+        +colorScheme: CS
+        +typography: TP
+        +spacing: SP
+        +getColor(key: ColorKey) CS::ColorType
+        +getTypography(key: TypographyKey) TP::FontType
+        +getSpacing(key: SpacingKey) SP::SpacingType
     }
     
-    class IColorSchemeProtocol {
+    class IColorSchemeProtocol~ColorType~ {
         <<interface>>
-        +primary: Color
-        +secondary: Color
-        +background: Color
-        +...()
+        +primary: ColorType
+        +secondary: ColorType
+        +background: ColorType
+        +surface: ColorType
+        +error: ColorType
+        +onPrimary: ColorType
+        +onSecondary: ColorType
+        +onBackground: ColorType
+        +onSurface: ColorType
+        +onError: ColorType
+        +getColor(key: ColorKey) ColorType
+        +setColor(key: ColorKey, color: ColorType)
     }
     
-    class ITypographyProtocol {
+    class ITypographyProtocol~FontType~ {
         <<interface>>
-        +headline1: Font
-        +body: Font
-        +...()
+        +largeTitle: FontType
+        +title1: FontType
+        +title2: FontType
+        +title3: FontType
+        +headline: FontType
+        +body: FontType
+        +callout: FontType
+        +subheadline: FontType
+        +footnote: FontType
+        +caption1: FontType
+        +caption2: FontType
+        +getFont(key: TypographyKey) FontType
+        +setFont(key: TypographyKey, font: FontType)
     }
     
-    class ISpacingProtocol {
+    class ISpacingProtocol~SpacingType~ {
         <<interface>>
-        +small: CGFloat
-        +medium: CGFloat
-        +large: CGFloat
+        +extraSmall: SpacingType
+        +small: SpacingType
+        +medium: SpacingType
+        +large: SpacingType
+        +extraLarge: SpacingType
+        +getSpacing(key: SpacingKey) SpacingType
+        +setSpacing(key: SpacingKey, value: SpacingType)
     }
     
-    class DefaultTheme {
-        +colorScheme: DefaultColorScheme
-        +typography: DefaultTypography
-        +spacing: DefaultSpacing
+    class MacOSThemeProtocol {
+        <<interface>>
+        +accentColor: NSColor
+        +controlBackgroundColor: NSColor
+        +labelColor: NSColor
+        +systemFont(ofSize: CGFloat, weight: NSFont.Weight) NSFont
     }
     
-    class ThemeServiceProtocol {
+    class iOSThemeProtocol {
         <<interface>>
-        +currentTheme: IThemeProtocol
-        +setTheme(theme: IThemeProtocol)
+        +tintColor: UIColor
+        +backgroundColor: UIColor
+        +labelColor: UIColor
+        +preferredFont(forTextStyle: UIFont.TextStyle) UIFont
+    }
+    
+    class ThemeManager~T: IThemeProtocol~ {
+        -currentTheme: T
+        +setTheme(theme: T)
+        +getTheme() T
+        +applyTheme()
         +observeSystemChanges()
     }
     
-    class ThemeService {
-        -currentTheme: IThemeProtocol
-        +setTheme(theme: IThemeProtocol)
-        +observeSystemChanges()
+    class ThemeModifier~T: IThemeProtocol~ {
+        +theme: T
+        +body(content: Content) some View
     }
     
-    class ThemeViewModel {
-        -themeService: ThemeServiceProtocol
-        +currentTheme: IThemeProtocol
-        +updateTheme(newTheme: IThemeProtocol)
-    }
-    
-    class ContentView {
-        -viewModel: ThemeViewModel
-        +body: some View
-    }
-    
-    class AppDependencyContainer {
-        +themeService: ThemeServiceProtocol
-        +makeContentView() ContentView
-    }
-    
-    class ThemeKey {
-        <<EnvironmentKey>>
-        +defaultValue: IThemeProtocol
-    }
-    
-    class EnvironmentValues {
-        +theme: IThemeProtocol
-    }
-    
-    class MyApp {
-        -container: AppDependencyContainer
-        +body: some Scene
-    }
-
-    IThemeProtocol <|-- DefaultTheme : implements
-    IThemeProtocol o-- IColorSchemeProtocol : has
-    IThemeProtocol o-- ITypographyProtocol : has
-    IThemeProtocol o-- ISpacingProtocol : has
-    
-    ThemeServiceProtocol <|.. ThemeService : implements
-    ThemeService --> IThemeProtocol : manages
-    
-    ThemeViewModel --> ThemeServiceProtocol : uses
-    ThemeViewModel --> IThemeProtocol : publishes
-    
-    ContentView --> ThemeViewModel : observes
-    
-    AppDependencyContainer --> ThemeServiceProtocol : creates
-    AppDependencyContainer --> ContentView : creates
-    
-    EnvironmentValues --> IThemeProtocol : stores
-    
-    MyApp --> AppDependencyContainer : uses
-    MyApp --> ContentView : presents
-    
-    ContentView --> EnvironmentValues : accesses theme
+    IThemeProtocol ..> IColorSchemeProtocol : uses
+    IThemeProtocol ..> ITypographyProtocol : uses
+    IThemeProtocol ..> ISpacingProtocol : uses
+    MacOSThemeProtocol --|> IThemeProtocol : extends
+    iOSThemeProtocol --|> IThemeProtocol : extends
+    ThemeManager ..> IThemeProtocol : manages
+    ThemeModifier ..> IThemeProtocol : applies
 ```
 
 Cool, right? 😎
-
-## 📘 Usage Guide
-
-Don't worry, using this theme manager is gonna be super easy! Here's a quick guide to get you started:
-
-1. 📦 Install the package (we'll add detailed SPM instructions soon!)
-2. 🏗 Set up your app's entry point:
-
-```swift
-@main
-struct MyApp: App {
-    let container = AppDependencyContainer()
-    
-    var body: some Scene {
-        WindowGroup {
-            container.makeContentView()
-                .environmentObject(container.themeService)
-        }
-    }
-}
-```
-
-3. 🎨 Use the theme in your views:
-
-```swift
-struct ContentView: View {
-    @Environment(\.theme) var theme
-    
-    var body: some View {
-        Text("Hello, World!")
-            .foregroundColor(theme.colorScheme.primary)
-            .font(theme.typography.body)
-    }
-}
-```
-
-4. 🔄 Change themes on the fly:
-
-```swift
-struct ThemeSwitcherView: View {
-    @EnvironmentObject var themeService: ThemeService
-    
-    var body: some View {
-        Button("Switch Theme") {
-            themeService.setTheme(AlternateTheme())
-        }
-    }
-}
-```
-
-And that's it! You're now a theming wizard! 🧙‍♂️✨
 
 ## 📁 Project Structure
 
@@ -208,12 +133,16 @@ SwiftUIThemeManager/
 │       │   │   ├── IThemeProtocol.swift
 │       │   │   ├── IColorSchemeProtocol.swift
 │       │   │   ├── ITypographyProtocol.swift
-│       │   │   └── ISpacingProtocol.swift
+│       │   │   ├── ISpacingProtocol.swift
+│       │   │   ├── MacOSThemeProtocol.swift
+│       │   │   └── iOSThemeProtocol.swift
 │       │   ├── Models/
-│       │   │   ├── DefaultTheme.swift
-│       │   │   ├── DefaultColorScheme.swift
-│       │   │   ├── DefaultTypography.swift
-│       │   │   └── DefaultSpacing.swift
+│       │   │   ├── KTheme.swift
+│       │   │   ├── KColorScheme.swift
+│       │   │   ├── KTypography.swift
+│       │   │   ├── KSpacing.swift
+│       │   │   ├── KMacOSTheme.swift
+│       │   │   └── KiOSTheme.swift
 │       │   └── Enums/
 │       │       ├── ColorKey.swift
 │       │       ├── TypographyKey.swift
@@ -233,21 +162,15 @@ SwiftUIThemeManager/
 ├── Tests/
 │   └── SwiftUIThemeManagerTests/
 │       ├── CoreTests/
-│       │   ├── DefaultThemeTests.swift
-│       │   └── ...
 │       ├── ServiceTests/
-│       │   └── ThemeServiceTests.swift
-│       └── ViewModelTests/
-│           └── ThemeViewModelTests.swift
+│       ├── ViewModelTests/
+│       └── ViewTests/
 └── Examples/
-    └── ThemeManagerDemo/
-        ├── ThemeManagerDemo.xcodeproj
-        └── ThemeManagerDemo/
-            ├── ThemeManagerDemoApp.swift
-            └── ContentView.swift
+    ├── MacOSExample/
+    └── iOSExample/
 ```
 
-### 🤔 Our Thought Process
+## 🤔 Our Thought Process
 
 We've put a lot of thought into this structure to make our package clean, modular, and easy to understand. Here's why we organized it this way:
 
@@ -270,11 +193,76 @@ We've put a lot of thought into this structure to make our package clean, modula
 
 2. 🧪 **Tests/**: We believe in the power of testing! This directory mirrors our source structure to make sure every part of our package is working correctly.
 
-3. 🎮 **Examples/**: We've included a demo project to show off what our theme manager can do. It's like a playground for our package!
+3. 🎮 **Examples/**: We've included demo projects for both macOS and iOS to show off what our theme manager can do. It's like a playground for our package!
 
 This structure follows the MVVM (Model-View-ViewModel) architecture, which helps us keep our code organized and separates concerns. It's also set up to play nice with Swift Package Manager, making it easy to integrate into your projects.
 
-We've designed this structure to be intuitive and scalable. Whether you're just using the package or diving in to contribute, you should be able to find your way around easily. And if we need to add new features in the future, we've got room to grow! 🌱
+## 📘 Usage Guide
+
+Don't worry, using this theme manager is gonna be super easy! Here's a quick guide to get you started:
+
+1. 📦 Install the package (we'll add detailed SPM instructions soon!)
+2. 🏗 Set up your app's entry point:
+
+```swift
+@main
+struct MyApp: App {
+    @StateObject private var themeViewModel = ThemeViewModel()
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .environmentObject(themeViewModel)
+        }
+    }
+}
+```
+
+3. 🎨 Use the theme in your views:
+
+```swift
+struct ContentView: View {
+    @EnvironmentObject var themeViewModel: ThemeViewModel
+    
+    var body: some View {
+        Text("Hello, World!")
+            .foregroundColor(themeViewModel.currentTheme.colorScheme.primary)
+            .font(themeViewModel.currentTheme.typography.body)
+    }
+}
+```
+
+4. 🔄 Change themes on the fly:
+
+```swift
+struct ThemeSwitcherView: View {
+    @EnvironmentObject var themeViewModel: ThemeViewModel
+    
+    var body: some View {
+        Button("Switch Theme") {
+            themeViewModel.switchToNextTheme()
+        }
+    }
+}
+```
+
+And that's it! You're now a theming wizard! 🧙‍♂️✨
+
+## 🗺 Roadmap
+
+Here's what we're planning to work on:
+
+- [ ] Implement core theme protocols and models
+- [ ] Create platform-specific theme protocols (macOS, iOS)
+- [ ] Develop theme service for managing themes
+- [ ] Build theme view model for MVVM architecture
+- [ ] Design and implement SwiftUI views for theme preview and selection
+- [ ] Create custom environment key for theme injection
+- [ ] Implement theme modifier for easy theme application
+- [ ] Write comprehensive unit tests for all components
+- [ ] Develop sample apps for macOS and iOS
+- [ ] Create detailed documentation and usage guide
+- [ ] Implement CI/CD pipeline for automated testing and deployment
 
 ## 🤝 Contributing
 
