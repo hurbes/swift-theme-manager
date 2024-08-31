@@ -205,20 +205,46 @@ SwiftUIThemeManager/
 │   └── SwiftUIThemeManager/
 │       ├── Core/
 │       │   ├── Protocols/
+│       │   │   ├── IThemeProtocol.swift
+│       │   │   ├── IColorSchemeProtocol.swift
+│       │   │   ├── ITypographyProtocol.swift
+│       │   │   └── ISpacingProtocol.swift
 │       │   ├── Models/
+│       │   │   ├── DefaultTheme.swift
+│       │   │   ├── DefaultColorScheme.swift
+│       │   │   ├── DefaultTypography.swift
+│       │   │   └── DefaultSpacing.swift
 │       │   └── Enums/
+│       │       ├── ColorKey.swift
+│       │       ├── TypographyKey.swift
+│       │       └── SpacingKey.swift
 │       ├── Services/
+│       │   ├── ThemeServiceProtocol.swift
+│       │   └── ThemeService.swift
 │       ├── ViewModels/
+│       │   └── ThemeViewModel.swift
 │       ├── Views/
+│       │   ├── ThemePreviewView.swift
+│       │   └── ThemeSwitcherView.swift
 │       ├── Environment/
+│       │   └── ThemeEnvironment.swift
 │       └── Utils/
+│           └── ThemeModifier.swift
 ├── Tests/
 │   └── SwiftUIThemeManagerTests/
 │       ├── CoreTests/
+│       │   ├── DefaultThemeTests.swift
+│       │   └── ...
 │       ├── ServiceTests/
+│       │   └── ThemeServiceTests.swift
 │       └── ViewModelTests/
+│           └── ThemeViewModelTests.swift
 └── Examples/
     └── ThemeManagerDemo/
+        ├── ThemeManagerDemo.xcodeproj
+        └── ThemeManagerDemo/
+            ├── ThemeManagerDemoApp.swift
+            └── ContentView.swift
 ```
 
 ### 🤔 Our Thought Process
